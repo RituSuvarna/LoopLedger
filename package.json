@@ -1,0 +1,19 @@
+{
+  "name": "loopledger",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LoopLedger - E-waste recovery and circular economy management platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node --check src/routes/devices.js && node --check src/routes/analytics.js && node --check src/middleware/errorHandler.js && node --check src/utils/recoveryEngine.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "helmet": "^8.1.0"
+  }
+}

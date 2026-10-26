@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1422">
+  <title>Page Not Found — LoopLedger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c1422;
+      --surface: #151f30;
+      --border: #29374b;
+      --text: #f1f5fb;
+      --muted: #96a5ba;
+      --accent: #8bdfb2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at 50% 35%, #1c3040 0%, transparent 52%),
+        var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    main {
+      width: min(100%, 480px);
+      padding: 42px 30px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--surface);
+      text-align: center;
+    }
+
+    .logo {
+      display: grid;
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 24px;
+      place-items: center;
+      border-radius: 17px;
+      background: var(--accent);
+      color: #10251b;
+      font-size: 40px;
+      font-weight: 700;
+    }
+
+    .code {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    h1 {
+      margin: 12px 0;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(28px, 6vw, 40px);
+      letter-spacing: -1.5px;
+    }
+
+    p {
+      margin: 0 auto 26px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 19px;
+      border-radius: 9px;
+      background: var(--accent);
+      color: #10251b;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    a:hover { filter: brightness(.94); }
+
+    footer {
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="logo" aria-hidden="true">↻</div>
+    <div class="code">ERROR 404</div>
+    <h1>This page took a wrong turn.</h1>
+    <p>The page you're looking for doesn't exist or may have moved. Let's get you back to the circular workspace.</p>
+    <a href="/">Return to LoopLedger →</a>
+    <footer>LoopLedger · Circular recovery intelligence</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101a2b">
+  <meta name="description" content="LoopLedger helps teams manage electronic device recovery, reuse, repair and recycling.">
+  <title>LoopLedger — Circular Recovery Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="/js/charts.js" defer></script>
+  <script src="/js/api.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a href="#overview" class="brand" aria-label="LoopLedger home">
+        <span class="brand-mark">↻</span>
+        <span class="brand-copy">
+          <strong>loopledger</strong>
+          <small>CIRCULAR INTELLIGENCE</small>
+        </span>
+      </a>
+
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="overview"><span>◫</span> Overview</button>
+        <button class="nav-item" data-page="inventory"><span>▤</span> Device inventory</button>
+        <button class="nav-item" data-page="recovery"><span>↗</span> Recovery intelligence</button>
+        <button class="nav-item" data-page="analytics"><span>▥</span> Impact analytics</button>
+      </nav>
+
+      <div class="workspace-label nav-secondary-label">MANAGEMENT</div>
+      <nav class="main-nav" aria-label="Management navigation">
+        <button class="nav-item" data-page="activity"><span>◷</span> Activity & records</button>
+        <button class="nav-item" data-page="settings"><span>⚙</span> Settings</button>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-impact">
+        <span class="impact-icon">✳</span>
+        <strong>Give devices a<br>second life.</strong>
+        <p>Track recovery. Reduce waste. Make circularity measurable.</p>
+        <div class="impact-track"><span></span></div>
+        <small>REUSE · REPAIR · RECOVER</small>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="avatar">LL</span>
+        <div><strong>Demo workspace</strong><small>Local project environment</small></div>
+        <button id="themeToggle" class="icon-button" aria-label="Toggle color theme" title="Toggle theme">☼</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button id="mobileMenu" class="icon-button mobile-menu" aria-label="Open navigation">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><span>/</span><strong id="breadcrumbCurrent">Overview</strong></div>
+        <div class="topbar-actions">
+          <span class="environment-pill"><span></span> DEMO ENVIRONMENT</span>
+          <button id="refreshButton" class="button button-quiet">↻ <span>Refresh data</span></button>
+        </div>
+      </header>
+
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+      <section class="page active" id="page-overview">
+        <div class="page-heading">
+          <div><div class="eyebrow">CIRCULAR OPERATIONS / OVERVIEW</div><h1>Recovery overview<span class="heading-dot">.</span></h1><p>A clearer view of what we collect, what we recover, and what comes next.</p></div>
+          <button class="button button-primary" data-action="add-device">＋ Register device</button>
+        </div>
+
+        <div class="welcome-strip">
+          <div class="welcome-symbol">↻</div>
+          <div><strong>Every device has a next chapter.</strong><p>Review incoming electronics, discover their recovery potential, and prioritize the next best action.</p></div>
+          <span class="strip-tag">CIRCULAR BY DESIGN</span>
+        </div>
+
+        <div class="metrics-grid">
+          <article class="metric-card"><div class="metric-top"><span>Devices tracked</span><span class="metric-icon icon-violet">▤</span></div><div class="metric-value" id="metricTotal">—</div><div class="metric-foot">Registered inventory</div></article>
+          <article class="metric-card"><div class="metric-top"><span>Ready for another life</span><span class="metric-icon icon-green">↗</span></div><div class="metric-value" id="metricReuse">—</div><div class="metric-foot">Reuse recommendations</div></article>
+          <article class="metric-card"><div class="metric-top"><span>Working devices</span><span class="metric-icon icon-blue">✓</span></div><div class="metric-value" id="metricWorking">—</div><div class="metric-foot">Currently operational</div></article>
+          <article class="metric-card"><div class="metric-top"><span>Potential waste avoided</span><span class="metric-icon icon-amber">✳</span></div><div class="metric-value" id="metricWaste">—</div><div class="metric-foot">Illustrative estimate in kg</div></article>
+        </div>
+
+        <div class="content-grid overview-grid">
+          <article class="panel chart-panel">
+            <div class="panel-heading"><div><h2>Recovery pipeline</h2><p>Where devices currently stand</p></div><span class="panel-kicker">LIVE INVENTORY</span></div>
+            <div class="chart-container"><canvas id="pipelineChart" aria-label="Device recovery pipeline chart"></canvas></div>
+            <div id="pipelineLegend" class="pipeline-legend"></div>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-heading"><div><h2>Recommended next steps</h2><p>Suggested paths based on device condition</p></div></div>
+            <div class="donut-wrap"><div class="donut-container"><canvas id="recommendationChart" aria-label="Recovery recommendation chart"></canvas></div><div id="recommendationLegend" class="recommendation-legend"></div></div>
+          </article>
+        </div>
+
+        <article class="panel table-panel">
+          <div class="panel-heading"><div><h2>Priority recovery queue</h2><p>Devices that need a decision or next action</p></div><button class="text-button" data-page="inventory">View inventory →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>DEVICE</th><th>CONDITION</th><th>STATUS</th><th>RECOMMENDATION</th><th></th></tr></thead><tbody id="priorityTable"></tbody></table></div>
+        </article>
+        <p class="data-disclaimer">Demo workspace · All initial records are fictional. Recovery and environmental figures are illustrative estimates, not verified measurements.</p>
+      </section>
+
+      <section class="page" id="page-inventory">
+        <div class="page-heading"><div><div class="eyebrow">ASSET MANAGEMENT</div><h1>Device inventory<span class="heading-dot">.</span></h1><p>One place to register, search, assess, and manage end-of-life electronics.</p></div><button class="button button-primary" data-action="add-device">＋ Register device</button></div>
+        <div class="inventory-toolbar panel">
+          <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search devices by name, category or ID..." aria-label="Search devices"></label>
+          <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option><option value="laptop">Laptop</option><option value="desktop">Desktop</option><option value="monitor">Monitor</option><option value="phone">Phone</option><option value="tablet">Tablet</option><option value="printer">Printer</option><option value="television">Television</option><option value="battery">Battery</option><option value="other">Other</option></select>
+          <select id="statusFilter" aria-label="Filter by status"><option value="">All statuses</option><option value="collected">Collected</option><option value="assessed">Assessed</option><option value="in-repair">In repair</option><option value="ready-for-reuse">Ready for reuse</option><option value="recycled">Recycled</option></select>
+          <button id="clearFilters" class="button button-quiet">Clear</button>
+        </div>
+        <article class="panel table-panel"><div class="panel-heading"><div><h2>All devices</h2><p id="inventoryCount">Loading inventory...</p></div><button id="exportButton" class="button button-secondary">↓ Export CSV</button></div><div class="table-wrap"><table><thead><tr><th>DEVICE</th><th>CATEGORY</th><th>CONDITION</th><th>STATUS</th><th>NEXT BEST ACTION</th><th>ACTIONS</th></tr></thead><tbody id="inventoryTable"></tbody></table></div><div id="emptyInventory" class="empty-state" hidden><span>⌕</span><h3>No matching devices</h3><p>Try a different search or register a new device.</p></div></article>
+      </section>
+
+      <section class="page" id="page-recovery">
+        <div class="page-heading"><div><div class="eyebrow">DECISION SUPPORT</div><h1>Recovery intelligence<span class="heading-dot">.</span></h1><p>Explainable recommendations for the next best life of each device.</p></div></div>
+        <div class="welcome-strip"><div class="welcome-symbol">✳</div><div><strong>Better decisions start with the right signals.</strong><p>Recommendations use device condition, age, working status, and estimated weight. They are rule-based, not AI predictions.</p></div></div>
+        <div id="recoveryCards" class="recovery-grid"></div>
+        <article class="panel table-panel"><div class="panel-heading"><div><h2>Recovery decision register</h2><p>Compare recommendations and their rationale</p></div></div><div class="table-wrap"><table><thead><tr><th>DEVICE</th><th>RECOVERY SCORE</th><th>RECOMMENDED ACTION</th><th>RATIONALE</th></tr></thead><tbody id="recoveryTable"></tbody></table></div></article>
+      </section>
+
+      <section class="page" id="page-analytics">
+        <div class="page-heading"><div><div class="eyebrow">MEASUREMENT & INSIGHTS</div><h1>Impact analytics<span class="heading-dot">.</span></h1><p>Understand inventory composition, recovery opportunities, and estimated material impact.</p></div><button class="button button-secondary" id="analyticsExport">↓ Export report</button></div>
+        <div class="metrics-grid analytics-metrics"><article class="metric-card"><div class="metric-top"><span>Total device weight</span><span class="metric-icon icon-blue">▤</span></div><div class="metric-value" id="analyticsWeight">—</div><div class="metric-foot">Estimated kilograms</div></article><article class="metric-card"><div class="metric-top"><span>Recovery potential</span><span class="metric-icon icon-green">↗</span></div><div class="metric-value" id="analyticsPotential">—</div><div class="metric-foot">Average assessment score</div></article><article class="metric-card"><div class="metric-top"><span>Devices for repair</span><span class="metric-icon icon-amber">⚒</span></div><div class="metric-value" id="analyticsRepair">—</div><div class="metric-foot">Suggested repair pathway</div></article><article class="metric-card"><div class="metric-top"><span>Demo records</span><span class="metric-icon icon-violet">ⓘ</span></div><div class="metric-value" id="analyticsDemo">—</div><div class="metric-foot">Fictional starter records</div></article></div>
+        <div class="content-grid"><article class="panel chart-panel"><div class="panel-heading"><div><h2>Inventory by category</h2><p>Distribution of tracked electronics</p></div></div><div class="chart-container"><canvas id="categoryChart" aria-label="Inventory by category chart"></canvas></div></article><article class="panel chart-panel"><div class="panel-heading"><div><h2>Recovery pathways</h2><p>Suggested next actions</p></div></div><div class="chart-container"><canvas id="impactChart" aria-label="Recovery pathways chart"></canvas></div></article></div>
+        <p class="data-disclaimer">Environmental impact estimates are simplified planning indicators. They do not represent independently verified carbon savings or certified recycling outcomes.</p>
+      </section>
+
+      <section class="page" id="page-activity">
+        <div class="page-heading"><div><div class="eyebrow">AUDIT & TRACEABILITY</div><h1>Activity & records<span class="heading-dot">.</span></h1><p>Review the current inventory and the most recent recorded changes.</p></div><button class="button button-secondary" id="activityExport">↓ Export records</button></div>
+        <article class="panel table-panel"><div class="panel-heading"><div><h2>Device register</h2><p>Creation and latest update timestamps</p></div><span class="panel-kicker">CURRENT RECORDS</span></div><div class="table-wrap"><table><thead><tr><th>DEVICE</th><th>RECORD ID</th><th>CREATED</th><th>LAST UPDATED</th><th>RECORD TYPE</th></tr></thead><tbody id="activityTable"></tbody></table></div></article>
+        <p class="data-disclaimer">This view displays record timestamps; it is not an immutable audit log of every historical change.</p>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="page-heading"><div><div class="eyebrow">WORKSPACE PREFERENCES</div><h1>Settings<span class="heading-dot">.</span></h1><p>Configure the local demonstration workspace and understand its data boundaries.</p></div></div>
+        <div class="settings-grid">
+          <article class="panel settings-card"><span class="settings-icon">◐</span><h2>Appearance</h2><p>Choose the dashboard theme for your current browser.</p><div class="settings-control"><span>Dark appearance</span><button id="settingsThemeToggle" class="button button-secondary">Toggle theme</button></div></article>
+          <article class="panel settings-card"><span class="settings-icon">▤</span><h2>Workspace data</h2><p>Records are stored by the local Express server in a JSON file.</p><div class="settings-control"><span>API status</span><span class="status-badge" id="apiStatus">Checking...</span></div><div class="settings-control"><span>Records in workspace</span><strong id="settingsRecordCount">—</strong></div></article>
+          <article class="panel settings-card"><span class="settings-icon">ⓘ</span><h2>Demo & privacy</h2><p>No real personal information is required for the starter dataset. Do not upload confidential or sensitive records.</p><div class="settings-control"><span>Starter records</span><strong>Fictional</strong></div><div class="settings-control"><span>Authentication</span><strong>Not implemented</strong></div></article>
+          <article class="panel settings-card"><span class="settings-icon">↻</span><h2>Reset demo data</h2><p>Reset the sample inventory to its original state. This permanently removes devices you added to the local demo.</p><button id="resetDemoButton" class="button button-danger">Reset sample inventory</button></article>
+        </div>
+      </section>
+
+      <footer class="app-footer"><span>LoopLedger <span id="footerYear"></span></span><span>Designed for a more circular future <span class="footer-heart">↻</span></span></footer>
+    </main>
+  </div>
+
+  <div id="deviceModal" class="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><div><div class="eyebrow">INVENTORY MANAGEMENT</div><h2 id="modalTitle">Register a device</h2><p>Enter device details to assess its recovery options.</p></div><button id="closeModal" class="icon-button" aria-label="Close dialog">×</button></div>
+      <form id="deviceForm">
+        <input id="deviceId" type="hidden">
+        <label class="form-field"><span>Device name *</span><input id="deviceName" name="name" required maxlength="100" placeholder="e.g. Office laptop"></label>
+        <div class="form-row"><label class="form-field"><span>Category *</span><select id="deviceCategory" name="category" required><option value="laptop">Laptop</option><option value="desktop">Desktop</option><option value="monitor">Monitor</option><option value="phone">Phone</option><option value="tablet">Tablet</option><option value="printer">Printer</option><option value="television">Television</option><option value="battery">Battery</option><option value="other">Other</option></select></label><label class="form-field"><span>Condition *</span><select id="deviceCondition" name="condition" required><option value="excellent">Excellent</option><option value="good">Good</option><option value="fair">Fair</option><option value="poor">Poor</option><option value="damaged">Damaged</option></select></label></div>
+        <div class="form-row"><label class="form-field"><span>Age (years) *</span><input id="deviceAge" name="ageYears" type="number" required min="0" max="100" step="1" value="2"></label><label class="form-field"><span>Weight (kg) *</span><input id="deviceWeight" name="weightKg" type="number" required min="0" max="10000" step="0.1" value="1"></label></div>
+        <label class="checkbox-field"><input id="deviceWorking" name="working" type="checkbox"><span>Device is currently working</span></label>
+        <label class="form-field" id="editStatusField" hidden><span>Recovery status</span><select id="deviceStatus" name="status"><option value="collected">Collected</option><option value="assessed">Assessed</option><option value="in-repair">In repair</option><option value="ready-for-reuse">Ready for reuse</option><option value="recycled">Recycled</option></select></label>
+        <div class="modal-actions"><button type="button" id="cancelModal" class="button button-quiet">Cancel</button><button type="submit" id="saveDeviceButton" class="button button-primary">Save device</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div id="confirmModal" class="modal-backdrop" hidden>
+    <section class="modal confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle"><div class="modal-heading"><div><div class="eyebrow">PLEASE CONFIRM</div><h2 id="confirmTitle">Reset sample inventory?</h2><p id="confirmMessage">Your current demo inventory will be replaced.</p></div><button id="closeConfirm" class="icon-button" aria-label="Close dialog">×</button></div><div class="modal-actions"><button id="cancelConfirm" class="button button-quiet">Cancel</button><button id="acceptConfirm" class="button button-danger">Confirm reset</button></div></section>
+  </div>
+</body>
+</html>
